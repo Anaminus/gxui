@@ -8,6 +8,7 @@ import (
 	"github.com/anaminus/gxui"
 	"github.com/anaminus/gxui/math"
 	"github.com/anaminus/gxui/mixins/outer"
+	"sort"
 )
 
 type LinearLayoutOuter interface {
@@ -27,22 +28,121 @@ func (l *LinearLayout) Init(outer LinearLayoutOuter) {
 	l.outer = outer
 }
 
+type childSize struct {
+	child *gxui.Child
+	size  int
+}
+
+type childSizes []*childSize
+
+func (c childSizes) Len() int {
+	return len(c)
+}
+func (c childSizes) Less(i, j int) bool {
+	return c[j].size < c[i].size
+}
+func (c childSizes) Swap(i, j int) {
+	c[i], c[j] = c[j], c[i]
+}
+
 func (l *LinearLayout) LayoutChildren() {
+	children := l.outer.Children()
+	if len(children) == 0 {
+		return
+	}
+
 	s := l.outer.Size().Contract(l.outer.Padding())
 	o := l.outer.Padding().LT()
-	children := l.outer.Children()
-	major := 0
-	if l.direction.RightToLeft() || l.direction.BottomToTop() {
+	sizes := make(childSizes, len(children))
+	var parentSize, contentSize, major int
+	if l.direction.Orientation().Horizontal() {
+		parentSize = s.W
+		for i, c := range children {
+			size := c.Control.DesiredSize(math.ZeroSize, s.Contract(c.Control.Margin()).Max(math.ZeroSize)).W
+			sizes[i] = &childSize{
+				child: c,
+				size:  size,
+			}
+			contentSize += size
+		}
 		if l.direction.RightToLeft() {
 			major = s.W
-		} else {
+		}
+	} else {
+		parentSize = s.H
+		for i, c := range children {
+			size := c.Control.DesiredSize(math.ZeroSize, s.Contract(c.Control.Margin()).Max(math.ZeroSize)).H
+			sizes[i] = &childSize{
+				child: c,
+				size:  size,
+			}
+			contentSize += size
+		}
+		if l.direction.BottomToTop() {
 			major = s.H
 		}
 	}
+
+	// If the the combined size of the children is greater than the size of
+	// the parent, reduce the sizes of the children until there is no more
+	// overflow.
+	overflow := contentSize - parentSize
+	if overflow > 0 {
+		sort.Sort(sizes)
+		largest := make(childSizes, 0, len(sizes))
+		for overflow > 0 {
+			largest = append(largest[:0], sizes[0])
+			maxSize := sizes[0].size
+			goalSize := 0
+			// Populate array with any other objects that have the same size.
+			for i := 1; i < len(sizes); i++ {
+				c := sizes[i]
+				if c.size < maxSize {
+					goalSize = c.size
+					break
+				}
+				largest = append(largest, c)
+			}
+
+			// Collapse largest objects evenly, but only down to the size of
+			// the next largest. This will allow the next largest object to be
+			// counted in the next iteration.
+			dist := maxSize - goalSize
+			if dist > overflow {
+				dist = overflow
+			}
+			for _, c := range largest {
+				c.size -= dist / len(largest)
+			}
+			rem := dist % len(largest)
+			if rem > 0 {
+				// Distribute remainder to objects lower in the list, so that
+				// the list remains sorted.
+				for i := len(largest) - 1; i >= 0; i-- {
+					if rem <= 0 {
+						break
+					}
+					largest[i].size -= 1
+					rem -= 1
+				}
+			}
+			overflow -= dist
+		}
+	}
+
+	if l.direction.Orientation().Horizontal() {
+		for _, c := range sizes {
+			c.child.Control.SetSize(math.Size{c.size, 0})
+		}
+	} else {
+		for _, c := range sizes {
+			c.child.Control.SetSize(math.Size{0, c.size})
+		}
+	}
+
 	for _, c := range children {
 		cm := c.Control.Margin()
-		cs := c.Control.DesiredSize(math.ZeroSize, s.Contract(cm).Max(math.ZeroSize))
-		c.Control.SetSize(cs)
+		cs := c.Control.Size()
 
 		// Calculate minor-axis alignment
 		var minor int
