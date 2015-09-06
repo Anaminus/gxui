@@ -1,7 +1,7 @@
 GXUI - A Go cross platform UI library.
 =======
 
-[![Join the chat at https://gitter.im/google/gxui](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/google/gxui?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/google/gxui.svg?branch=master)](https://travis-ci.org/google/gxui) [![GoDoc](https://godoc.org/github.com/google/gxui?status.svg)](https://godoc.org/github.com/google/gxui)
+[![Join the chat at https://gitter.im/google/gxui](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/google/gxui?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) [![Build Status](https://travis-ci.org/google/gxui.svg?branch=master)](https://travis-ci.org/google/gxui) [![GoDoc](https://godoc.org/github.com/anaminus/gxui?status.svg)](https://godoc.org/github.com/anaminus/gxui)
 
 Disclaimer
 ---
@@ -25,15 +25,15 @@ In order to build GXUI on linux, you will need the following packages installed:
 
 After setting up ```GOPATH``` (see [Go documentation](https://golang.org/doc/code.html)), you can then fetch the GXUI library and its dependencies:
 
-    go get -u github.com/google/gxui/...
+    go get -u github.com/anaminus/gxui/...
 
 Samples
 ---
-Samples can be found in [`gxui/samples`](https://github.com/google/gxui/tree/master/samples).
+Samples can be found in [`gxui/samples`](https://github.com/anaminus/gxui/tree/master/samples).
 
 To build all samples run:
 
-    go install github.com/google/gxui/samples/...
+    go install github.com/anaminus/gxui/samples/...
 
 And they will be built into ```GOPATH/bin```.
 
@@ -45,9 +45,9 @@ Web
 gxui code is cross platform and can be compiled using GopherJS to JavaScript, allowing it to run in browsers with WebGL support. To do so, you'll need the [GopherJS compiler](https://github.com/gopherjs/gopherjs) and some additional dependencies:
 
     go get -u github.com/gopherjs/gopherjs
-    go get -u -d -tags=js github.com/google/gxui/...
-    
-Afterwards, you can try the samples by running `gopherjs serve` command and opening <http://localhost:8080/github.com/google/gxui/samples/> in a browser.
+    go get -u -d -tags=js github.com/anaminus/gxui/...
+
+Afterwards, you can try the samples by running `gopherjs serve` command and opening <http://localhost:8080/github.com/anaminus/gxui/samples/> in a browser.
 
 Fonts
 ---

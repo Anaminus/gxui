@@ -7,9 +7,9 @@ package flags
 
 import (
 	"flag"
-	"github.com/google/gxui"
-	"github.com/google/gxui/themes/dark"
-	"github.com/google/gxui/themes/light"
+	"github.com/anaminus/gxui"
+	"github.com/anaminus/gxui/themes/dark"
+	"github.com/anaminus/gxui/themes/light"
 )
 
 var DefaultScaleFactor float32

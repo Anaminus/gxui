@@ -5,9 +5,9 @@
 package parts
 
 import (
-	"github.com/google/gxui"
-	"github.com/google/gxui/math"
-	"github.com/google/gxui/mixins/outer"
+	"github.com/anaminus/gxui"
+	"github.com/anaminus/gxui/math"
+	"github.com/anaminus/gxui/mixins/outer"
 )
 
 type LinearLayoutOuter interface {

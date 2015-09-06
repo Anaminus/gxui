@@ -5,7 +5,7 @@
 package basic
 
 import (
-	"github.com/google/gxui"
+	"github.com/anaminus/gxui"
 )
 
 type Theme struct {

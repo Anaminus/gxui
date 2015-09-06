@@ -5,9 +5,9 @@
 package basic
 
 import (
-	"github.com/google/gxui"
-	"github.com/google/gxui/math"
-	"github.com/google/gxui/mixins"
+	"github.com/anaminus/gxui"
+	"github.com/anaminus/gxui/math"
+	"github.com/anaminus/gxui/mixins"
 )
 
 type PanelHolder struct {

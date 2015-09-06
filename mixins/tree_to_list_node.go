@@ -7,7 +7,7 @@ package mixins
 import (
 	"fmt"
 
-	"github.com/google/gxui"
+	"github.com/anaminus/gxui"
 )
 
 type treeToListNodeParent interface {

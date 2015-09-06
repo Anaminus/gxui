@@ -5,8 +5,8 @@
 package basic
 
 import (
-	"github.com/google/gxui"
-	"github.com/google/gxui/mixins"
+	"github.com/anaminus/gxui"
+	"github.com/anaminus/gxui/mixins"
 )
 
 func CreateLinearLayout(theme *Theme) gxui.LinearLayout {

@@ -6,7 +6,7 @@ package gxui
 
 import (
 	"fmt"
-	test "github.com/google/gxui/testing"
+	test "github.com/anaminus/gxui/testing"
 	"testing"
 )
 

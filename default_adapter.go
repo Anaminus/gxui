@@ -8,7 +8,7 @@ import (
 	"fmt"
 	"reflect"
 
-	"github.com/google/gxui/math"
+	"github.com/anaminus/gxui/math"
 )
 
 type Viewer interface {

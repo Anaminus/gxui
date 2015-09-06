@@ -5,9 +5,9 @@
 package base
 
 import (
-	"github.com/google/gxui"
-	"github.com/google/gxui/mixins/outer"
-	"github.com/google/gxui/mixins/parts"
+	"github.com/anaminus/gxui"
+	"github.com/anaminus/gxui/mixins/outer"
+	"github.com/anaminus/gxui/mixins/parts"
 )
 
 type ContainerNoControlOuter interface {

@@ -4,7 +4,7 @@
 
 package gxui
 
-import "github.com/google/gxui/math"
+import "github.com/anaminus/gxui/math"
 
 // Tree is the interface of all controls that visualize a hierarchical tree
 // structure of items.

@@ -5,9 +5,9 @@
 package mixins
 
 import (
-	"github.com/google/gxui"
-	"github.com/google/gxui/mixins/base"
-	"github.com/google/gxui/mixins/parts"
+	"github.com/anaminus/gxui"
+	"github.com/anaminus/gxui/mixins/base"
+	"github.com/anaminus/gxui/mixins/parts"
 )
 
 type LinearLayoutOuter interface {

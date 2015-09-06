@@ -11,8 +11,8 @@ import (
 	"sync/atomic"
 	"time"
 
-	"github.com/google/gxui"
-	"github.com/google/gxui/math"
+	"github.com/anaminus/gxui"
+	"github.com/anaminus/gxui/math"
 	"github.com/goxjs/gl"
 	"github.com/goxjs/glfw"
 )
