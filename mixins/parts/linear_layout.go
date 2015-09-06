@@ -30,7 +30,8 @@ func (l *LinearLayout) Init(outer LinearLayoutOuter) {
 
 type childSize struct {
 	child *gxui.Child
-	size  int
+	major int
+	minor int
 }
 
 type childSizes []*childSize
@@ -39,7 +40,7 @@ func (c childSizes) Len() int {
 	return len(c)
 }
 func (c childSizes) Less(i, j int) bool {
-	return c[j].size < c[i].size
+	return c[j].major < c[i].major
 }
 func (c childSizes) Swap(i, j int) {
 	c[i], c[j] = c[j], c[i]
@@ -58,12 +59,13 @@ func (l *LinearLayout) LayoutChildren() {
 	if l.direction.Orientation().Horizontal() {
 		parentSize = s.W
 		for i, c := range children {
-			size := c.Control.DesiredSize(math.ZeroSize, s.Contract(c.Control.Margin()).Max(math.ZeroSize)).W
+			size := c.Control.DesiredSize(math.ZeroSize, s.Contract(c.Control.Margin()).Max(math.ZeroSize))
 			sizes[i] = &childSize{
 				child: c,
-				size:  size,
+				major: size.W,
+				minor: size.H,
 			}
-			contentSize += size
+			contentSize += size.W
 		}
 		if l.direction.RightToLeft() {
 			major = s.W
@@ -71,12 +73,13 @@ func (l *LinearLayout) LayoutChildren() {
 	} else {
 		parentSize = s.H
 		for i, c := range children {
-			size := c.Control.DesiredSize(math.ZeroSize, s.Contract(c.Control.Margin()).Max(math.ZeroSize)).H
+			size := c.Control.DesiredSize(math.ZeroSize, s.Contract(c.Control.Margin()).Max(math.ZeroSize))
 			sizes[i] = &childSize{
 				child: c,
-				size:  size,
+				major: size.H,
+				minor: size.W,
 			}
-			contentSize += size
+			contentSize += size.H
 		}
 		if l.direction.BottomToTop() {
 			major = s.H
@@ -92,13 +95,13 @@ func (l *LinearLayout) LayoutChildren() {
 		largest := make(childSizes, 0, len(sizes))
 		for overflow > 0 {
 			largest = append(largest[:0], sizes[0])
-			maxSize := sizes[0].size
+			maxSize := sizes[0].major
 			goalSize := 0
 			// Populate array with any other objects that have the same size.
 			for i := 1; i < len(sizes); i++ {
 				c := sizes[i]
-				if c.size < maxSize {
-					goalSize = c.size
+				if c.major < maxSize {
+					goalSize = c.major
 					break
 				}
 				largest = append(largest, c)
@@ -112,7 +115,7 @@ func (l *LinearLayout) LayoutChildren() {
 				dist = overflow
 			}
 			for _, c := range largest {
-				c.size -= dist / len(largest)
+				c.major -= dist / len(largest)
 			}
 			rem := dist % len(largest)
 			if rem > 0 {
@@ -122,7 +125,7 @@ func (l *LinearLayout) LayoutChildren() {
 					if rem <= 0 {
 						break
 					}
-					largest[i].size -= 1
+					largest[i].major -= 1
 					rem -= 1
 				}
 			}
@@ -132,11 +135,11 @@ func (l *LinearLayout) LayoutChildren() {
 
 	if l.direction.Orientation().Horizontal() {
 		for _, c := range sizes {
-			c.child.Control.SetSize(math.Size{c.size, 0})
+			c.child.Control.SetSize(math.Size{c.major, c.minor})
 		}
 	} else {
 		for _, c := range sizes {
-			c.child.Control.SetSize(math.Size{0, c.size})
+			c.child.Control.SetSize(math.Size{c.minor, c.major})
 		}
 	}
 
