@@ -59,7 +59,7 @@ func (l *LinearLayout) LayoutChildren() {
 	if l.direction.Orientation().Horizontal() {
 		parentSize = s.W
 		for i, c := range children {
-			size := c.Control.DesiredSize(math.ZeroSize, s.Contract(c.Control.Margin()).Max(math.ZeroSize))
+			size := c.Control.DesiredSize(math.ZeroSize, s.Contract(c.Control.Margin()).Max(math.ZeroSize)).Expand(c.Control.Margin())
 			sizes[i] = &childSize{
 				child: c,
 				major: size.W,
@@ -73,7 +73,7 @@ func (l *LinearLayout) LayoutChildren() {
 	} else {
 		parentSize = s.H
 		for i, c := range children {
-			size := c.Control.DesiredSize(math.ZeroSize, s.Contract(c.Control.Margin()).Max(math.ZeroSize))
+			size := c.Control.DesiredSize(math.ZeroSize, s.Contract(c.Control.Margin()).Max(math.ZeroSize)).Expand(c.Control.Margin())
 			sizes[i] = &childSize{
 				child: c,
 				major: size.H,
@@ -135,11 +135,11 @@ func (l *LinearLayout) LayoutChildren() {
 
 	if l.direction.Orientation().Horizontal() {
 		for _, c := range sizes {
-			c.child.Control.SetSize(math.Size{c.major, c.minor})
+			c.child.Control.SetSize(math.Size{c.major, c.minor}.Contract(c.child.Control.Margin()))
 		}
 	} else {
 		for _, c := range sizes {
-			c.child.Control.SetSize(math.Size{c.minor, c.major})
+			c.child.Control.SetSize(math.Size{c.minor, c.major}.Contract(c.child.Control.Margin()))
 		}
 	}
 
