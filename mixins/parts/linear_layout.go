@@ -52,7 +52,7 @@ func (l *LinearLayout) LayoutChildren() {
 		return
 	}
 
-	s := l.outer.Size().Contract(l.outer.Padding())
+	s := l.outer.Size().Contract(l.outer.Padding()).Max(math.ZeroSize)
 	o := l.outer.Padding().LT()
 	sizes := make(childSizes, len(children))
 	var parentSize, contentSize, major int
@@ -96,6 +96,10 @@ func (l *LinearLayout) LayoutChildren() {
 		for overflow > 0 {
 			largest = append(largest[:0], sizes[0])
 			maxSize := sizes[0].major
+			if maxSize <= 0 {
+				// Finish if all objects are too small.
+				break
+			}
 			goalSize := 0
 			// Populate array with any other objects that have the same size.
 			for i := 1; i < len(sizes); i++ {
@@ -135,11 +139,11 @@ func (l *LinearLayout) LayoutChildren() {
 
 	if l.direction.Orientation().Horizontal() {
 		for _, c := range sizes {
-			c.child.Control.SetSize(math.Size{c.major, c.minor}.Contract(c.child.Control.Margin()))
+			c.child.Control.SetSize(math.Size{c.major, c.minor}.Contract(c.child.Control.Margin()).Max(math.ZeroSize))
 		}
 	} else {
 		for _, c := range sizes {
-			c.child.Control.SetSize(math.Size{c.minor, c.major}.Contract(c.child.Control.Margin()))
+			c.child.Control.SetSize(math.Size{c.minor, c.major}.Contract(c.child.Control.Margin()).Max(math.ZeroSize))
 		}
 	}
 
