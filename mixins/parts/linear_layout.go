@@ -68,7 +68,36 @@ func (l *LinearLayout) LayoutChildren() {
 			contentSize += size.W
 		}
 		if l.direction.RightToLeft() {
-			major = s.W
+			switch l.horizontalAlignment {
+			case gxui.AlignLeft:
+				if contentSize > parentSize {
+					major = parentSize
+				} else {
+					major = contentSize
+				}
+			case gxui.AlignCenter:
+				major = (parentSize-contentSize)/2 + contentSize
+				if major < 0 {
+					major = 0
+				}
+			case gxui.AlignRight:
+				major = parentSize
+			}
+		} else {
+			switch l.horizontalAlignment {
+			case gxui.AlignLeft:
+				major = 0
+			case gxui.AlignCenter:
+				major = (parentSize - contentSize) / 2
+				if major < 0 {
+					major = 0
+				}
+			case gxui.AlignRight:
+				major = parentSize - contentSize
+				if major < 0 {
+					major = 0
+				}
+			}
 		}
 	} else {
 		parentSize = s.H
@@ -82,7 +111,36 @@ func (l *LinearLayout) LayoutChildren() {
 			contentSize += size.H
 		}
 		if l.direction.BottomToTop() {
-			major = s.H
+			switch l.verticalAlignment {
+			case gxui.AlignTop:
+				if contentSize > parentSize {
+					major = parentSize
+				} else {
+					major = contentSize
+				}
+			case gxui.AlignMiddle:
+				major = (parentSize-contentSize)/2 + contentSize
+				if major < 0 {
+					major = 0
+				}
+			case gxui.AlignBottom:
+				major = parentSize
+			}
+		} else {
+			switch l.verticalAlignment {
+			case gxui.AlignTop:
+				major = 0
+			case gxui.AlignMiddle:
+				major = (parentSize - contentSize) / 2
+				if major < 0 {
+					major = 0
+				}
+			case gxui.AlignBottom:
+				major = parentSize - contentSize
+				if major < 0 {
+					major = 0
+				}
+			}
 		}
 	}
 
