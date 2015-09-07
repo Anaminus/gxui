@@ -177,25 +177,21 @@ func (l *LinearLayout) LayoutChildren() {
 			c.Offset = math.Point{X: major, Y: minor}.Add(o)
 			major += cs.W
 			major += cm.R
-			s.W -= cs.W + cm.W()
 		case gxui.RightToLeft:
 			major -= cm.R
 			c.Offset = math.Point{X: major - cs.W, Y: minor}.Add(o)
 			major -= cs.W
 			major -= cm.L
-			s.W -= cs.W + cm.W()
 		case gxui.TopToBottom:
 			major += cm.T
 			c.Offset = math.Point{X: minor, Y: major}.Add(o)
 			major += cs.H
 			major += cm.B
-			s.H -= cs.H + cm.H()
 		case gxui.BottomToTop:
 			major -= cm.B
 			c.Offset = math.Point{X: minor, Y: major - cs.H}.Add(o)
 			major -= cs.H
 			major -= cm.T
-			s.H -= cs.H + cm.H()
 		}
 	}
 }
