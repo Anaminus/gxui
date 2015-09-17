@@ -20,15 +20,18 @@ type Button struct {
 	LinearLayout
 	parts.Focusable
 
-	outer      ButtonOuter
-	theme      gxui.Theme
-	label      gxui.Label
-	buttonType gxui.ButtonType
-	checked    bool
+	outer       ButtonOuter
+	theme       gxui.Theme
+	label       gxui.Label
+	buttonType  gxui.ButtonType
+	checked     bool
+	desiredSize math.Size
 }
 
 func (b *Button) Init(outer ButtonOuter, theme gxui.Theme) {
 	b.LinearLayout.Init(outer, theme)
+	b.LinearLayout.SetHorizontalAlignment(gxui.AlignCenter)
+	b.LinearLayout.SetVerticalAlignment(gxui.AlignMiddle)
 	b.Focusable.Init(outer)
 
 	b.buttonType = gxui.PushButton
@@ -113,4 +116,22 @@ func (b *Button) KeyPress(ev gxui.KeyboardEvent) (consume bool) {
 		return b.Click(me)
 	}
 	return
+}
+
+func (b *Button) SetDesiredSize(size math.Size) {
+	if b.desiredSize != size {
+		b.desiredSize = size
+		b.Relayout()
+	}
+}
+
+func (b *Button) DesiredSize(min, max math.Size) math.Size {
+	size := b.LinearLayout.DesiredSize(min, max)
+	if size.W < b.desiredSize.W {
+		size.W = b.desiredSize.W
+	}
+	if size.H < b.desiredSize.H {
+		size.H = b.desiredSize.H
+	}
+	return size.Clamp(min, max)
 }

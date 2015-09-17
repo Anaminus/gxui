@@ -4,6 +4,10 @@
 
 package gxui
 
+import (
+	"github.com/anaminus/gxui/math"
+)
+
 type ButtonType int
 
 const (
@@ -19,4 +23,5 @@ type Button interface {
 	SetType(ButtonType)
 	IsChecked() bool
 	SetChecked(bool)
+	SetDesiredSize(math.Size)
 }
