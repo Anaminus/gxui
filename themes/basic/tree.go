@@ -68,6 +68,7 @@ func (treeControlCreator) Create(theme gxui.Theme, control gxui.Control, node *m
 
 	ll := theme.CreateLinearLayout()
 	ll.SetDirection(gxui.LeftToRight)
+	ll.SetVerticalAlignment(gxui.AlignMiddle)
 
 	btn := theme.CreateButton()
 	btn.SetBackgroundBrush(gxui.TransparentBrush)
