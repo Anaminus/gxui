@@ -129,7 +129,9 @@ func (a *TreeToListAdapter) ExpandItem(item gxui.AdapterItem) {
 			break
 		}
 		node = node.children[idx]
-		node.Expand()
+		if node.Item() != item {
+			node.Expand()
+		}
 	}
 }
 
