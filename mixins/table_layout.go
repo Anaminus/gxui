@@ -37,6 +37,8 @@ type TableLayout struct {
 	colTotalWeight int
 
 	desiredSize math.Size
+	clampedW    bool
+	clampedH    bool
 }
 
 func (l *TableLayout) Init(outer TableLayoutOuter, theme gxui.Theme) {
@@ -113,6 +115,12 @@ func (l *TableLayout) DesiredSize(min, max math.Size) math.Size {
 	if size.H < 0 {
 		size.H = max.H
 	}
+	if l.clampedW {
+		size.W = math.Clamp(size.W, min.W, max.W)
+	}
+	if l.clampedH {
+		size.H = math.Clamp(size.H, min.H, max.H)
+	}
 	return size
 }
 
@@ -122,6 +130,17 @@ func (l *TableLayout) SetDesiredSize(size math.Size) {
 		l.outer.Relayout()
 	}
 }
+
+func (l *TableLayout) SizeClamped() (bool, bool) {
+	return l.clampedW, l.clampedH
+}
+
+func (l *TableLayout) SetSizeClamped(w, h bool) {
+	if l.clampedW != w || l.clampedH != h {
+		l.clampedW = w
+		l.clampedH = h
+		l.outer.Relayout()
+	}
 }
 
 func (l *TableLayout) SetGrid(columns, rows int) {

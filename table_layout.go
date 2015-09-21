@@ -18,4 +18,8 @@ type TableLayout interface {
 	// Give the table a constant size. If an axis is less than 0, then that
 	// axis will instead fill the available space.
 	SetDesiredSize(math.Size)
+	// Returns how the size is clamped on either axis.
+	SizeClamped() (w bool, h bool)
+	// Sets how the size is clamped on either axis.
+	SetSizeClamped(w bool, h bool)
 }
