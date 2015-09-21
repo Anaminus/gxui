@@ -117,7 +117,11 @@ func (l *TableLayout) DesiredSize(min, max math.Size) math.Size {
 }
 
 func (l *TableLayout) SetDesiredSize(size math.Size) {
-	l.desiredSize = size
+	if size != l.desiredSize {
+		l.desiredSize = size
+		l.outer.Relayout()
+	}
+}
 }
 
 func (l *TableLayout) SetGrid(columns, rows int) {
