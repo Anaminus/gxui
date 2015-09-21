@@ -35,12 +35,15 @@ type TableLayout struct {
 	colWeight      []int
 	rowTotalWeight int
 	colTotalWeight int
+
+	desiredSize math.Size
 }
 
 func (l *TableLayout) Init(outer TableLayoutOuter, theme gxui.Theme) {
 	l.Container.Init(outer, theme)
 	l.outer = outer
 	l.grid = make(map[gxui.Control]Cell)
+	l.desiredSize = math.Size{-1, -1}
 
 	// Interface compliance test
 	_ = gxui.TableLayout(l)
@@ -103,7 +106,18 @@ func (l *TableLayout) LayoutChildren() {
 }
 
 func (l *TableLayout) DesiredSize(min, max math.Size) math.Size {
-	return max
+	size := l.desiredSize
+	if size.W < 0 {
+		size.W = max.W
+	}
+	if size.H < 0 {
+		size.H = max.H
+	}
+	return size
+}
+
+func (l *TableLayout) SetDesiredSize(size math.Size) {
+	l.desiredSize = size
 }
 
 func (l *TableLayout) SetGrid(columns, rows int) {

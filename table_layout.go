@@ -1,5 +1,9 @@
 package gxui
 
+import (
+	"github.com/anaminus/gxui/math"
+)
+
 type TableLayout interface {
 	Control
 
@@ -11,4 +15,7 @@ type TableLayout interface {
 	RemoveChild(child Control)
 	SetColumnWeight(col, weight int)
 	SetRowWeight(row, weight int)
+	// Give the table a constant size. If an axis is less than 0, then that
+	// axis will instead fill the available space.
+	SetDesiredSize(math.Size)
 }
