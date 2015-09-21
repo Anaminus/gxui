@@ -55,6 +55,10 @@ func (d *DrawPaint) Redraw() {
 }
 
 func (d *DrawPaint) Draw() gxui.Canvas {
+	if !d.outer.Attached() {
+		panic(fmt.Errorf("Attempting to draw a non-attached control %T", d.outer))
+	}
+
 	s := d.outer.Size()
 	if s.Area() == 0 {
 		return nil // No area to draw in
