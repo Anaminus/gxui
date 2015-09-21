@@ -9,4 +9,6 @@ type TableLayout interface {
 	// Add child at cell {x, y} with size of {w, h}
 	SetChildAt(x, y, w, h int, child Control) *Child
 	RemoveChild(child Control)
+	SetColumnWeight(col, weight int)
+	SetRowWeight(row, weight int)
 }

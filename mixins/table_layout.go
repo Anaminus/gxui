@@ -30,6 +30,11 @@ type TableLayout struct {
 	grid    map[gxui.Control]Cell
 	rows    int
 	columns int
+
+	rowWeight      []int
+	colWeight      []int
+	rowTotalWeight int
+	colTotalWeight int
 }
 
 func (l *TableLayout) Init(outer TableLayoutOuter, theme gxui.Theme) {
@@ -45,7 +50,9 @@ func (l *TableLayout) LayoutChildren() {
 	s := l.outer.Size().Contract(l.outer.Padding())
 	o := l.outer.Padding().LT()
 
-	cw, ch := s.W/l.columns, s.H/l.rows
+	cw, ch := float64(s.W), float64(s.H)
+
+	ctweight, rtweight := float64(l.colTotalWeight), float64(l.rowTotalWeight)
 
 	var cr math.Rect
 
@@ -53,10 +60,43 @@ func (l *TableLayout) LayoutChildren() {
 		cm := c.Control.Margin()
 		cell := l.grid[c.Control]
 
-		x, y := cell.x*cw, cell.y*ch
-		w, h := x+cell.w*cw, y+cell.h*ch
+		var xs float64
+		{
+			var weight float64
+			for i := 0; i < cell.x; i++ {
+				weight += float64(l.colWeight[i])
+			}
+			xs = weight / ctweight
+		}
+		var ys float64
+		{
+			var weight float64
+			for i := 0; i < cell.y; i++ {
+				weight += float64(l.rowWeight[i])
+			}
+			ys = weight / rtweight
+		}
+		var ws float64
+		{
+			var weight float64
+			for i := cell.x; i < cell.x+cell.w; i++ {
+				weight += float64(l.colWeight[i])
+			}
+			ws = weight / ctweight
+		}
+		var hs float64
+		{
+			var weight float64
+			for i := cell.y; i < cell.y+cell.h; i++ {
+				weight += float64(l.rowWeight[i])
+			}
+			hs = weight / rtweight
+		}
 
-		cr = math.CreateRect(x+cm.L, y+cm.T, w-cm.R, h-cm.B)
+		x, y := cw*xs, ch*ys
+		w, h := x+cw*ws, y+ch*hs
+
+		cr = math.CreateRect(int(x), int(y), int(w), int(h)).Contract(cm)
 
 		c.Layout(cr.Offset(o).Canon())
 	}
@@ -77,8 +117,19 @@ func (l *TableLayout) SetGrid(columns, rows int) {
 				}
 				l.columns--
 			}
+			l.colWeight = l.colWeight[:l.columns]
+			l.colTotalWeight = 0
+			for _, w := range l.colWeight {
+				l.colTotalWeight += w
+			}
 		} else {
 			l.columns = columns
+			a := make([]int, l.columns-len(l.colWeight))
+			for i := range a {
+				a[i] = 1
+			}
+			l.colWeight = append(l.colWeight, a...)
+			l.colTotalWeight += len(a)
 		}
 	}
 
@@ -92,8 +143,19 @@ func (l *TableLayout) SetGrid(columns, rows int) {
 				}
 				l.rows--
 			}
+			l.rowWeight = l.rowWeight[:l.rows]
+			l.rowTotalWeight = 0
+			for _, w := range l.rowWeight {
+				l.rowTotalWeight += w
+			}
 		} else {
 			l.rows = rows
+			a := make([]int, l.rows-len(l.rowWeight))
+			for i := range a {
+				a[i] = 1
+			}
+			l.rowWeight = append(l.rowWeight, a...)
+			l.rowTotalWeight += len(a)
 		}
 	}
 
@@ -120,4 +182,34 @@ func (l *TableLayout) SetChildAt(x, y, w, h int, child gxui.Control) *gxui.Child
 func (l *TableLayout) RemoveChild(child gxui.Control) {
 	delete(l.grid, child)
 	l.Container.RemoveChild(child)
+}
+
+func (l *TableLayout) SetColumnWeight(col, weight int) {
+	if col < 0 || col >= len(l.rowWeight) {
+		panic("Column is out of grid")
+	}
+	if weight < 0 {
+		panic("Weight cannot be less than 0")
+	}
+	if l.colWeight[col] != weight {
+		w := l.colWeight[col]
+		l.colWeight[col] = weight
+		l.colTotalWeight += -w + weight
+		l.LayoutChildren()
+	}
+}
+
+func (l *TableLayout) SetRowWeight(row, weight int) {
+	if row < 0 || row >= len(l.rowWeight) {
+		panic("Row is out of grid")
+	}
+	if weight < 0 {
+		panic("Weight cannot be less than 0")
+	}
+	if l.rowWeight[row] != weight {
+		w := l.rowWeight[row]
+		l.rowWeight[row] = weight
+		l.rowTotalWeight += -w + weight
+		l.LayoutChildren()
+	}
 }
