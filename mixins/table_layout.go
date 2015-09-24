@@ -225,6 +225,11 @@ func (l *TableLayout) RemoveChild(child gxui.Control) {
 	l.Container.RemoveChild(child)
 }
 
+func (l *TableLayout) RemoveAll() {
+	l.grid = make(map[gxui.Control]Cell, len(l.grid))
+	l.Container.RemoveAll()
+}
+
 func (l *TableLayout) SetColumnWeight(col, weight int) {
 	if col < 0 || col >= len(l.rowWeight) {
 		panic("Column is out of grid")
