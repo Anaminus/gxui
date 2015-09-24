@@ -231,7 +231,7 @@ func (l *TableLayout) RemoveAll() {
 }
 
 func (l *TableLayout) SetColumnWeight(col, weight int) {
-	if col < 0 || col >= len(l.rowWeight) {
+	if col < 0 || col >= len(l.colWeight) {
 		panic("Column is out of grid")
 	}
 	if weight < 0 {
