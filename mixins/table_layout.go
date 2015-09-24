@@ -143,6 +143,10 @@ func (l *TableLayout) SetSizeClamped(w, h bool) {
 	}
 }
 
+func (l *TableLayout) Grid() (columns, rows int) {
+	return l.columns, l.rows
+}
+
 func (l *TableLayout) SetGrid(columns, rows int) {
 	if l.columns != columns {
 		if l.columns > columns {

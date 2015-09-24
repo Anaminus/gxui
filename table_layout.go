@@ -9,6 +9,7 @@ type TableLayout interface {
 
 	Parent
 
+	Grid() (columns, row int)
 	SetGrid(columns, rows int)
 	// Add child at cell {x, y} with size of {w, h}
 	SetChildAt(x, y, w, h int, child Control) *Child
