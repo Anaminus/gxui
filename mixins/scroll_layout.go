@@ -104,7 +104,7 @@ func (l *ScrollLayout) SetScrollOffset(scrollOffset math.Point) bool {
 
 	if l.scrollOffset != scrollOffset {
 		l.scrollOffset = scrollOffset
-		l.Relayout()
+		l.LayoutChildren()
 		return true
 	}
 
