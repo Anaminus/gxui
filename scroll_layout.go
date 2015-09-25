@@ -11,6 +11,8 @@ type ScrollLayout interface {
 	Child() Control
 	SetScrollAxis(horizontal, vertical bool)
 	ScrollAxis() (horizontal, vertical bool)
+	ScrollLength() int
+	SetScrollLength(int)
 	BorderPen() Pen
 	SetBorderPen(Pen)
 	BackgroundBrush() Brush

@@ -26,6 +26,7 @@ type ScrollLayout struct {
 	scrollBarX, scrollBarY *gxui.Child
 	child                  *gxui.Child
 	innerSize              math.Size
+	mouseScroll            int
 }
 
 func (l *ScrollLayout) Init(outer ScrollLayoutOuter, theme gxui.Theme) {
@@ -36,6 +37,7 @@ func (l *ScrollLayout) Init(outer ScrollLayoutOuter, theme gxui.Theme) {
 	l.theme = theme
 	l.canScrollX = true
 	l.canScrollY = true
+	l.mouseScroll = -1
 	scrollBarX := theme.CreateScrollBar()
 	scrollBarX.SetOrientation(gxui.Horizontal)
 	scrollBarX.OnScroll(func(from, to int) { l.SetScrollOffset(math.Point{X: from, Y: l.scrollOffset.Y}) })
@@ -116,14 +118,31 @@ func (l *ScrollLayout) MouseScroll(ev gxui.MouseEvent) (consume bool) {
 	if ev.ScrollY == 0 {
 		return l.InputEventHandler.MouseScroll(ev)
 	}
+	mouseScroll := l.mouseScroll
+	if mouseScroll < 0 {
+		mouseScroll = ev.ScrollY
+	} else {
+		if ev.ScrollY < 0 {
+			mouseScroll = -mouseScroll
+		}
+	}
+
 	switch {
 	case l.canScrollY:
-		return l.SetScrollOffset(l.scrollOffset.AddY(-ev.ScrollY))
+		return l.SetScrollOffset(l.scrollOffset.AddY(-mouseScroll))
 	case l.canScrollX:
-		return l.SetScrollOffset(l.scrollOffset.AddX(-ev.ScrollY))
+		return l.SetScrollOffset(l.scrollOffset.AddX(-mouseScroll))
 	default:
 		return false
 	}
+}
+
+func (l *ScrollLayout) ScrollLength() int {
+	return l.mouseScroll
+}
+
+func (l *ScrollLayout) SetScrollLength(length int) {
+	l.mouseScroll = length
 }
 
 // gxui.ScrollLayout complaince
