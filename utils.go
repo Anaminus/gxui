@@ -181,6 +181,17 @@ func TransformCoordinate(coord math.Point, from, to Control) math.Point {
 	return coord
 }
 
+// BoundsToWindow converts the bounds of a control to window coordinates. The
+// control must be a descendant of a window.
+func BoundsToWindow(from Control) math.Rect {
+	to := WindowContaining(from)
+	parent := from.Parent()
+	rect := parent.Children().Find(from).Bounds()
+	rect.Min = ChildToParent(rect.Min, parent.(Control), to)
+	rect.Max = ChildToParent(rect.Max, parent.(Control), to)
+	return rect
+}
+
 // FindControl performs a depth-first search of the controls starting from root,
 // calling test with each visited control. If test returns true then the search
 // is stopped and FindControl returns the Control passed to test. If no call to
