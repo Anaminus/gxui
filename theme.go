@@ -18,6 +18,7 @@ type Theme interface {
 	CreateLabel() Label
 	CreateLinearLayout() LinearLayout
 	CreateList() List
+	CreateMenuOverlay() MenuOverlay
 	CreatePanelHolder() PanelHolder
 	CreateProgressBar() ProgressBar
 	CreateScrollBar() ScrollBar

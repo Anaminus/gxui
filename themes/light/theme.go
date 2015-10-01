@@ -53,6 +53,7 @@ func CreateTheme(driver gxui.Driver) gxui.Theme {
 		FocusedStyle:              basic.CreateStyle(gxui.Gray20, gxui.Transparent, focus, 1.0),
 		HighlightStyle:            basic.CreateStyle(gxui.Gray40, gxui.Transparent, neonBlue, 2.0),
 		LabelStyle:                basic.CreateStyle(gxui.Gray40, gxui.Transparent, gxui.Transparent, 0.0),
+		MenuOverlayStyle:          basic.CreateStyle(gxui.Gray40, gxui.Gray20, gxui.Gray40, 1.0),
 		PanelBackgroundStyle:      basic.CreateStyle(gxui.Gray40, gxui.White, gxui.Gray15, 1.0),
 		ScrollBarBarDefaultStyle:  basic.CreateStyle(gxui.Gray40, gxui.Gray30, gxui.Gray40, 1.0),
 		ScrollBarBarOverStyle:     basic.CreateStyle(gxui.Gray40, gxui.Gray50, gxui.Gray60, 1.0),

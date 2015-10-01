@@ -25,6 +25,7 @@ type Theme struct {
 	FocusedStyle              Style
 	HighlightStyle            Style
 	LabelStyle                Style
+	MenuOverlayStyle          Style
 	PanelBackgroundStyle      Style
 	ScrollBarBarDefaultStyle  Style
 	ScrollBarBarOverStyle     Style
@@ -91,6 +92,10 @@ func (t *Theme) CreateLinearLayout() gxui.LinearLayout {
 
 func (t *Theme) CreateList() gxui.List {
 	return CreateList(t)
+}
+
+func (t *Theme) CreateMenuOverlay() gxui.MenuOverlay {
+	return CreateMenuOverlay(t)
 }
 
 func (t *Theme) CreatePanelHolder() gxui.PanelHolder {
